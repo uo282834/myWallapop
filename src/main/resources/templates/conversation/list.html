@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://thymeleaf.org">
+<head th:replace="fragments/head"></head>
+<body>
+<nav th:replace="fragments/nav"></nav>
+<div class="table-responsive" th:fragment="tableConversations" id="tableConversations">
+    <table class="table table-hover">
+        <thead>
+        <tr>
+            <th scope="col"><span th:text="#{conversation.email}"></span></th>
+            <th scope="col"><span th:text="#{conversation.title}"></span></th>
+            <th scope="col"></th>
+            <th scope="col"></th>
+            <th scope="col"></th>
+            <th scope="col"></th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="conversation : ${conversations}">
+            <td scope="row" th:text="${conversation.getOffer().getUser().getEmail()}"></td>
+            <td scope="row" th:text="${conversation.getOffer().getTitle()}"></td>
+            <td>
+
+                <a th:href="${'/conversation/chat/' + conversation.getOffer.id+'/'+conversation.id}"
+                >  conversación</a>
+                <a th:href="${'/conversation/delete/'+conversation.id}"
+                >  borrar</a>
+
+
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+<footer th:replace="fragments/footer"></footer>
+</body>
+</html>

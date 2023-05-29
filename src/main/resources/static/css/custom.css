@@ -1,0 +1,29 @@
+/* Sticky footer styles-------------------------------------------------- */
+html {
+    position: relative;
+    min-height: 100%;
+}
+body {
+    /* Margin bottom by footer height */
+    margin-bottom: 60px;
+}
+footer {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 60px;
+    background-color: #007bff;
+    text-align:center;
+    line-height:60px
+}
+
+img.img-thumbnail.rounded.float-left {
+    max-width: 20%;
+}
+
+a {
+    color: #fff;
+    background-color: #007bff;
+    border-color: #007bff;
+}
+/* Sticky footer styles-------------------------------------------------- */

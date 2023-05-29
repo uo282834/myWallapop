@@ -1,0 +1,52 @@
+<div id = "tableUsers">
+    <table id="table" class="table table-hover" >
+        <thead>
+        <tr>
+            <th scope="col">Email</th>
+            <th scope="col">Nombre</th>
+            <th scope="col">Apellidos</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="user : ${usersList}">
+            <td scope="row" th:text="${user.email}"> </td>
+            <td th:text="${user.name}"></td>
+            <td th:text="${user.lastName}"></td>
+            <td>
+                <div th:if="${user.isSelected}">
+                    <button type="button" th:id="${'deselectButton' + user.id}"
+                            class="btn btn-success">Deseleccionar
+                    </button>
+                    <script th:inline="javascript">
+                        /*<![CDATA[*/
+                        $( "#deselectButton"+ "[[${user.id}]]").click(function() {
+                            $.get( "/users/[[${user.id}]]/deselect", function( data ) {
+                                let urlUpdate = '/users/list/update';
+                                $("#tableUsers").load(urlUpdate);
+
+                            });
+                        });
+                        /*]]>*/
+                    </script>
+                </div>
+                <div th:if="${!user.isSelected}">
+                    <button type="button" th:id="${'selectButton' + user.id}"
+                            class="btn btn-success">Seleccionar
+                    </button>
+                    <script th:inline="javascript">
+                        /*<![CDATA[*/
+                        $( "#selectButton"+ "[[${user.id}]]").click(function() {
+                            $.get( "/users/[[${user.id}]]/select", function( data ) {
+                                let urlUpdate = '/users/list/update';
+                                $("#tableUsers").load(urlUpdate);
+
+                            });
+                        });
+                        /*]]>*/
+                    </script>
+                </div>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>

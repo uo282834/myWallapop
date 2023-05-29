@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<head th:replace="fragments/head">
+<body>
+<nav th:replace="fragments/nav"/>
+<h2 th:text="#{usersList.users}"></h2>
+<div id = "tableUsers">
+    <table id="table" class="table table-hover" >
+        <thead>
+        <tr>
+            <th scope="col" th:text="#{usersList.email}"></th>
+            <th scope="col" th:text="#{usersList.name}"></th>
+            <th scope="col" th:text="#{usersList.surname}"></th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="user : ${usersList}">
+            <td scope="row" th:text="${user.email}"> </td>
+            <td th:text="${user.name}"></td>
+            <td th:text="${user.lastName}"></td>
+            <td>
+                <input th:if="${user.id!=activeUser.id}" type="checkbox" th:id="${'Seleccionado' + user.id}"
+                       name="seleccionado" th:value ="${user.email}"   th:text="#{usersList.select}">
+                <script th:inline="javascript">
+                    /*<![CDATA[*/
+                    $( "#Seleccionado"+[[${user.id}]]).click(function() {
+                        if($(this).prop('checked')){
+                            $.get("/admin/userList/add/"+[[${user.email}]]);
+                            console.log([[${user.email}]]);
+                        }else{
+                            $.get("/admin/userList/removeFromList/"+[[${user.email}]]);
+                            console.log([[${user.email}]]);
+                        }
+                    });
+                    /*]]>*/
+                </script>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+<div id="formulario">
+    <form method="post" action="/admin/userList/remove">
+        <button type="submit" th:id="deleteAll"
+                class="btn btn-success"
+                th:text="#{usersList.delete}">
+        </button>
+    </form>
+</div>
+<footer th:replace="fragments/footer"/>
+</body>
+</html>

@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://thymeleaf.org">
+<head th:replace="fragments/head"></head>
+<body>
+<nav th:replace="fragments/nav"></nav>
+<div class="container">
+  <h1>Lista Ofertas</h1>
+  <div class="table-responsive">
+    <table class="table table-hover" id="tableOffers">
+      <thead>
+      <tr>
+        <th scope="col"><span th:text="#{offers.image}"></span></th>
+        <th scope="col"><span th:text="#{offers.title}"></span></th>
+        <th scope="col"><span th:text="#{offers.details}"></span></th>
+        <th scope="col"><span th:text="#{offers.price}"></span></th>
+        <th scope="col"></th>
+        <th scope="col"></th>
+        <th scope="col"></th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr th:each="offer : ${offersList}">
+        <td><img class="img-thumbnail rounded float-left" th:src="@{'/images/' + ${offer.image}}" th:alt="${offer.image}" /></td>
+        <td scope="row" th:text="${offer.title}"></td>
+        <td th:text="${offer.details}"></td>
+        <td th:text="${offer.amount}"></td>
+        <td><a th:href="${'/offer/details/' + offer.id}">Detalles</a></td>
+        <td><a th:href="${'/offer/delete/' + offer.id}">Eliminar</a></td>
+        <td><a th:href="${'/offer/edit/' + offer.id}">Modificar</a></td>
+
+      </tr>
+      </tbody>
+    </table>
+    <div th:if="${#lists.isEmpty(offersList)}">
+      No hay ofertas
+    </div>
+  </div>
+    </table>
+</div>
+<footer th:replace="fragments/footer"></footer>
+</body>
+</html>

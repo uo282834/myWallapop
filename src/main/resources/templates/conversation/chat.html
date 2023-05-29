@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://thymeleaf.org">
+<head th:replace="fragments/head.html"></head>
+<link rel="stylesheet" href="/css/chat.css" />
+<body>
+<nav th:replace="fragments/nav.html"></nav>
+
+<div th:each="message: ${messages}">
+  <span th:if="${message.getBuyer().getEmail().equals(user.getEmail())}" >
+    <div class="message sent">
+      <p>  <span th:text="${user.getName()}"></span>  </p>
+      <span th:text="${message.text}"></span>
+      <p class = "fecha"> <span th:text="${message.getDate().toLocaleString()}"></span></p>
+    </div>
+  </span>
+    <span th:unless="${message.getBuyer().getEmail().equals(user.getEmail())}">
+      <div class="message received">
+      <p>  <span th:text="${message.getBuyer().getName()}"></span>  </p>
+        <span th:text="${message.text}"></span>
+        <p class = "fecha"> <span th:text="${message.getDate().toLocaleString()}"></span></p>
+      </div>
+
+
+</span>
+
+</div>
+<form th:action="@{/conversation/send/{id}/(id=${conversation.id})}"
+      method="post">
+  <input type="text" name="mensaje"
+         th:placeholder="#{sendMessage}" />
+  <button type="submit"
+         class = "btn" >
+   enviar
+  </button>
+</form>
+</body>
+</html>

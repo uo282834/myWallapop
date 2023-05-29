@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://thymeleaf.org">
+<head th:replace="fragments/head"></head>
+<body>
+<nav th:replace="fragments/nav"></nav>
+<div class="container">
+    <h1 th:text="#{logs.log}"></h1>
+    <a th:text="#{logs.delete}" th:href="${'/logs/delete/'}"></a>
+    <div th:each="log : ${logslist}">
+        <p>
+            <span th:text="${log.type}"></span>
+            <span th:text="${log.details}"></span>
+            <span th:text="${log.date}"></span>
+        </p>
+    </div>
+    <div th:if="${#lists.isEmpty(logslist)}">
+        No hay logs disponibles
+    </div>
+</div>
+<footer th:replace="fragments/footer"></footer>
+</body>
+</html>
