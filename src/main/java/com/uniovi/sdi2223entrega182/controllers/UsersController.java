@@ -10,6 +10,7 @@ import com.uniovi.sdi2223entrega182.validators.SignUpFormValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -56,6 +57,30 @@ public class UsersController {
         return "redirect:home";
     }
     /**
+     * Método que permite cambiar la contraseña
+     *
+     * @param user   que contiene los datos del nuevo usuario a registrar
+     * @param result para comprobar si hay errores de validación en el formulario
+     * @return la vista para registrarte si hay errores y la vista del home con
+     *         ofertas destacadas si no hay errores en el formulario y hay ofertas
+     *         destacada
+     */
+    @RequestMapping(value = "/changePassword", method = RequestMethod.POST)
+    public String changePasswordPost(@Validated User user, BindingResult result) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String email = auth.getName();
+        User activeUser = usersService.getUserByEmail(email);
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+        // Verificar que la nueva contraseña no sea igual a la anterior
+        if (encoder.matches(user.getPassword(),activeUser.getPassword())) {
+            return "redirect:changePassword";
+        }else{
+            activeUser.setPassword(user.getPassword());
+            usersService.addUser(activeUser);
+            return "redirect:home";
+        }
+    }
+    /**
      * Método que devuelve la vista con el formulario para registrarse
      *
      * @param model donde se guardará un nuevo usuario
@@ -70,6 +95,17 @@ public class UsersController {
             return "signup";
         }
     }
+    /**
+     * Método que devuelve la vista con el formulario para registrarse
+     *
+     * @param model donde se guardará un nuevo usuario
+     * @return la vista para cubrir el formulario de registro
+     */
+    @RequestMapping(value = "/changePassword", method = RequestMethod.GET)
+    public String changePasswordGet(Model model) {
+            model.addAttribute("user", new User());
+            return "changePassword";
+        }
 
     /**
      * Método que devuelve la vista con el formulario para hacer log in en el
