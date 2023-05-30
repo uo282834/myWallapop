@@ -158,4 +158,9 @@ public class UsersService {
     public Object getUsers() {
         return null;
     }
+
+    public boolean repeatedPassword(String password, String password1) {
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+        return encoder.matches(password,password1);
+    }
 }

@@ -16,6 +16,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -60,19 +61,18 @@ public class UsersController {
      * Método que permite cambiar la contraseña
      *
      * @param user   que contiene los datos del nuevo usuario a registrar
-     * @param result para comprobar si hay errores de validación en el formulario
      * @return la vista para registrarte si hay errores y la vista del home con
      *         ofertas destacadas si no hay errores en el formulario y hay ofertas
      *         destacada
      */
     @RequestMapping(value = "/changePassword", method = RequestMethod.POST)
-    public String changePasswordPost(@Validated User user, BindingResult result) {
+    public String changePasswordPost(@Validated User user, RedirectAttributes atrr) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String email = auth.getName();
         User activeUser = usersService.getUserByEmail(email);
-        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
         // Verificar que la nueva contraseña no sea igual a la anterior
-        if (encoder.matches(user.getPassword(),activeUser.getPassword())) {
+        if (usersService.repeatedPassword(user.getPassword(),activeUser.getPassword())) {
+            atrr.addFlashAttribute("repetida", "");
             return "redirect:changePassword";
         }else{
             activeUser.setPassword(user.getPassword());

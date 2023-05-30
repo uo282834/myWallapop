@@ -30,7 +30,7 @@ public class LogService {
         repository.deleteById(id);
     }
 
-    public Page<Log> getLogs(Pageable pageable) {
+    public Page<Log> getLog(Pageable pageable) {
         Page<Log> list = repository.findAll(pageable);
         return list;
     }
