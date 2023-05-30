@@ -10,8 +10,10 @@
     <div class="message sent">
       <p>  <span th:text="${user.getName()}"></span>  </p>
       <span th:text="${message.text}"></span>
+
       <p class = "fecha"> <span th:text="${message.getDate().toLocaleString()}"></span></p>
     </div>
+    <a th:href="${'/conversation/deleteM/' + message.getId()}">Borrar</a>
   </span>
     <span th:unless="${message.getBuyer().getEmail().equals(user.getEmail())}">
       <div class="message received">

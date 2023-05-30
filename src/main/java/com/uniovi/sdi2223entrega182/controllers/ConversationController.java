@@ -4,6 +4,7 @@ import com.uniovi.sdi2223entrega182.entities.Conversation;
 import com.uniovi.sdi2223entrega182.entities.Log;
 import com.uniovi.sdi2223entrega182.entities.Offer;
 import com.uniovi.sdi2223entrega182.entities.User;
+import com.uniovi.sdi2223entrega182.repositories.MessageRepository;
 import com.uniovi.sdi2223entrega182.services.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,6 +33,9 @@ public class ConversationController {
     private OffersService offersService;
     @Autowired
     private ConversationServices conversationService;
+    @Autowired
+    private MessageRepository messageRepository;
+
 
     /**
      * Metodo que devuelve un chat
@@ -131,6 +135,11 @@ public class ConversationController {
        if(a==null){
            return "/convn/list";
        }
+        return "redirect:/conversation/list";
+    }
+    @RequestMapping("/conversation/deleteM/{id}")
+    public String deleteMessage(@PathVariable Long id) {
+        messageRepository.deleteById(id);
         return "redirect:/conversation/list";
     }
 

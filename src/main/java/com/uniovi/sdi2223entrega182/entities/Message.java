@@ -44,7 +44,9 @@ public class Message {
     public String getText() {
         return text;
     }
-
+    public Long getId() {
+        return id;
+    }
 
     public User getOfferOwner() {
         return offerOwner;
