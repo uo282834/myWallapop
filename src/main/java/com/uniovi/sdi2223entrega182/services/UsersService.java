@@ -17,6 +17,7 @@ import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 public class UsersService {
@@ -163,4 +164,30 @@ public class UsersService {
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
         return encoder.matches(password,password1);
     }
+    public void addToCarrito(Offer offer, User activeUser) {
+        List<Offer> c = activeUser.getCarrito();
+        c.add(offer);
+        activeUser.setCarrito(c);
+        usersRepository.save(activeUser);
+    }
+
+    public void deleteToCarrito(Offer offer, User activeUser) {
+        List<Offer> c = activeUser.getCarrito();
+        c.remove(offer);
+        activeUser.setCarrito(c);
+        usersRepository.save(activeUser);
+    }
+
+    public boolean getPrecioCarrito(User activeUser) {
+        List<Offer> c = activeUser.getCarrito();
+        int money = 0;
+        for (Offer o:c){
+            money += o.getAmount();
+        }
+        if(activeUser.getMoney() >= money){
+            return true;
+        }
+        return false;
+    }
+
 }

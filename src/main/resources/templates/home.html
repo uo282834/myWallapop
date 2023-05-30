@@ -39,6 +39,7 @@
                     <div th:if="${offer.available}" >
                         <button  class="btn btn-primary" >
                            <a  th:href="${'/home/buy/' + offer.id}"><span th:text="#{offers.buy}"></span></a>
+                            <a  th:href="${'/users/addCarrito/' + offer.id}"><span th:text="#{offers.carrito}"></span></a>
                         </button>
                     </div>
                     <div th:unless="${offer.available}">

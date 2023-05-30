@@ -20,6 +20,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 @Controller
 public class UsersController {
@@ -32,6 +33,8 @@ public class UsersController {
     private UsersService usersService;
     @Autowired
     private RolesService rolesService;
+    @Autowired
+    private OffersService offersService;
 
 
 
@@ -95,6 +98,7 @@ public class UsersController {
             return "signup";
         }
     }
+
     /**
      * Método que devuelve la vista con el formulario para registrarse
      *
@@ -140,7 +144,45 @@ public class UsersController {
         model.addAttribute("usersToDelete", new ArrayList<String>());
         return "users/list";
     }
-
+    /**
+     * Método que devuelve la lista de usuarios
+     * @param model El modelo
+     * @return La vista de la lista
+     */
+    @RequestMapping(value ="/users/carrito")
+    public String getCarrito(Model model){
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String email = auth.getName();
+        User activeUser = usersService.getUserByEmail(email);
+        activeUser.getCarrito();
+        model.addAttribute("carrito", activeUser.getCarrito());
+        return "users/carrito";
+    }
+    @RequestMapping(value = {"/users/addCarrito/{id}"})
+    public String addCarrito(Model model, @PathVariable Long id) {
+        User activeUser = usersService.getUser();
+        Offer offer = offersService.getOffer(id);
+        usersService.addToCarrito(offer, activeUser);
+        return "redirect:/users/carrito";
+    }
+    @RequestMapping(value = {"/users/deleteCarrito/{id}"})
+    public String deleteCarrito(Model model, @PathVariable Long id) {
+        User activeUser = usersService.getUser();
+        Offer offer = offersService.getOffer(id);
+        usersService.deleteToCarrito(offer, activeUser);
+        return "redirect:/users/carrito";
+    }
+    @RequestMapping(value = {"/users/buyCarrito"})
+    public String buyCarrito(Model model, RedirectAttributes atrr) {
+        User activeUser = usersService.getUser();
+        if (usersService.getPrecioCarrito(activeUser)){
+            offersService.buyCarrito(activeUser);
+            return "redirect:/offer/bought";
+        }else{
+            atrr.addFlashAttribute("sindinero","");
+            return "redirect:/users/carrito";
+        }
+    }
 
     /**
      * Método que borre todos los usuarios seleccionados

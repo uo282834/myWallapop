@@ -7,6 +7,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -21,6 +23,8 @@ public class OffersService {
 
     @Autowired
     private OffersRepository offersRepository;
+    @Autowired
+    private UsersService usersService;
 
     private static final Logger logger = LoggerFactory.getLogger(SecurityService.class);
 
@@ -77,5 +81,19 @@ public class OffersService {
         offerSet.add(offer);
         activeUser.setOffersBought(offerSet);
         offer.setNotAvailable();
+    }
+
+    public void buyCarrito(User activeUser) {
+        List<Offer> c = activeUser.getCarrito();
+        int money = 0;
+        for (Offer o:c){
+            updateOfferUser(activeUser,o);
+            addOffer(o);
+            usersService.addUser(activeUser);
+        }
+        List<Offer> c2 = activeUser.getCarrito();
+        c2.removeAll(c2);
+        activeUser.setCarrito(c2);
+        usersService.addUser(activeUser);
     }
 }

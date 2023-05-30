@@ -1,7 +1,9 @@
 package com.uniovi.sdi2223entrega182.entities;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -28,6 +30,9 @@ public class User {
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private Set<Offer> offers;
+
+    @OneToMany(mappedBy = "", cascade = CascadeType.ALL)
+    private List<Offer> carrito = new ArrayList<Offer>();
 
     public User(String email, String name, String lastName) {
         super();
@@ -110,7 +115,12 @@ public class User {
     public Set<Offer> getOffers() {
         return offers;
     }
-
+    public List<Offer> getCarrito() {
+        return carrito;
+    }
+    public void setCarrito(List<Offer> carrito) {
+        this.carrito = carrito;
+    }
     public void setOffers(Set<Offer> offers) {
         this.offers = offers;
     }

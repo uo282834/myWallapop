@@ -1,0 +1,16 @@
+<table class="table table-hover" th:fragment="logTable" id="logTable" xmlns:sec="http://www.w3.org/1999/xhtml">
+<thead>
+  <tr>
+    <th scope="col">Tipo</th>
+    <th scope="col">Descripción</th>
+    <th scope="col">Detalles</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr th:each="log : ${logslist}">
+    <td scope="row" th:text="${log.type}">Título</td>
+    <td scope="row" th:text="${log.details}">Descripcion</td>
+    <td scope="row" th:text="${log.date}">Detalles</td>
+  </tr>
+  </tbody>
+</table>

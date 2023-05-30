@@ -6,6 +6,7 @@ import com.uniovi.sdi2223entrega182.services.SecurityService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -28,7 +29,9 @@ public class LogController {
      */
     @RequestMapping("/logs")
     public String log(Model model, Pageable pageable){
-        model.addAttribute("logslist", logService.getLog(pageable));
+        Page<Log> logs = this.logService.getLog(pageable);
+        model.addAttribute("logslist", logs.getContent());
+        model.addAttribute("page", logs);
         if (!loggin){
             logger.info(String.format("Acceso a LOG LIST"));
             Log log = new Log("PET","LOG CONTROLLER LIST", new Date());
